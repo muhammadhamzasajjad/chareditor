@@ -25,47 +25,50 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * @license GPL-3.0
  */
  
-/* global selectedLCD */
+/* global selectedLCD, codes, selectedPId */
 
-var codes={}
-var selectedPId;
+var codes = {};	//contains the charcodes of the preview boxes
+								//that have been edited by the user
+var selectedPId;	//contains the id of the selected preview
 
-function iszero(s){
+/* CODE Functions */
+
+//takes the binary/hex string and returns true if all the bytes are 0, false otherwise
+function iszero (s){
 	var strings=s.split('\n');
 	var iszero=true;
-	for(var i=1;i<strings.length-1;i++){
-		var str=strings[i].trim();
-		if(str!='B00000'&&str!='B00000,'&&str!='0x00'&&str!='0x00'){
-			iszero=false;
+	for(var i = 1; i < strings.length - 1; i++){
+		var str = strings[i].trim();
+		if(str != 'B00000' && str != 'B00000,' && str != '0x00' && str != '0x00,'){
+			iszero = false;
 		}
 	}
 	return iszero;
 }
 
-function allCodeChanged(){
+function allCodeChanged (){
 	if(document.getElementsByName('allCode')[0].checked){
-		document.getElementById("code-box__code").value=printcodes();
+		document.getElementById("code-box__code").value = printcodes();
 	}
 	else{
-		selectedPId=document.getElementsByClassName('lcd-pixel__selected')[0].id;
-		document.getElementById("code-box__code").value = 'byte charName[] = '+codes[selectedPId];
+		selectedPId = document.getElementsByClassName('lcd-pixel__selected')[0].id;
+		document.getElementById("code-box__code").value = 'byte charName[] = ' + codes[selectedPId];
 	}
 }
 
-function printcodes(){
-	
+function printcodes (){
 	var str="";
 	
 	for(var i in codes){
 		if(!iszero(codes[i])){
-			str=str+'byte char'+i.split('-')[1]+'[] = '+codes[i]+'\n';
+			str = str + 'byte char' + i.split('-')[1] + '[] = ' + codes[i] + '\n';
 		}
 	}
 	
 	return str;
 }
 
-/* CODE Functions */
+
 function updateCode (){
   /* Updates the code according to editor */
   var charname = document.getElementById("pixel-editor__charname").value;
@@ -82,11 +85,11 @@ function updateCode (){
   var full_code = code_header + "\r\n" +
                   code_body + "\r\n" +
                   code_footer;
-	selectedPId=document.getElementsByClassName('lcd-pixel__selected')[0].id;
-	codes[selectedPId]=full_code.substring(full_code.indexOf('{'));
-	
+  selectedPId = document.getElementsByClassName('lcd-pixel__selected')[0].id;
+  codes[selectedPId] = full_code.substring(full_code.indexOf('{'));
+
 	if(document.getElementsByName('allCode')[0].checked){
-		document.getElementById("code-box__code").value=printcodes();
+		document.getElementById("code-box__code").value = printcodes();
 	}
 	else{
 		document.getElementById("code-box__code").value = full_code;
@@ -113,7 +116,7 @@ function getBinaryCode () {
   return code_body
 }
 
-function getHexCode() {
+function getHexCode () {
   /* Returns hexadecimal code according to pixels state */
   var code_body = "";
   for (var row = 0; row < 8; row++) {
