@@ -34,7 +34,7 @@ var selectedPId;	//contains the id of the selected preview
 /* CODE Functions */
 
 //takes the binary/hex string and returns true if all the bytes are 0, false otherwise
-function iszero (s){
+function isZero (s){
 	var strings=s.split('\n');
 	var iszero=true;
 	for(var i = 1; i < strings.length - 1; i++){
@@ -60,7 +60,7 @@ function printcodes (){
 	var str="";
 	
 	for(var i in codes){
-		if(!iszero(codes[i])){
+		if(!isZero(codes[i])){
 			str = str + 'byte char' + i.split('-')[1] + '[] = ' + codes[i] + '\n';
 		}
 	}
